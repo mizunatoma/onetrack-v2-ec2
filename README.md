@@ -1,12 +1,12 @@
-# Time Track Log 🕰️
+# OneTrack (v2) 🕰️
 
 **タイマー記録とTodo管理を同一画面にまとめ、学習時間の記録から月次の振り返りまで行えるWebアプリ**
 
-[🚀 アプリを試す](https://learning-track.com) ｜ [🎥 操作デモを見る（Loom）](https://www.loom.com/share/503c9dd329774a62add25db48cf0e61e)
+[🚀 アプリを試す](https://learning-track.com) ｜ [🎥 操作デモを見る（Loom）](https://www.loom.com/share/870cd9472a42497fb2e5c40a7f09a233)
 
 > 登録不要のゲストログインで、デモデータをすぐに操作できます。
 
-「勉強に集中したいのにスマホが手放せない・記録しても振り返りづらい」——資格勉強で使っていた記録アプリへの不満を、自分で解決するために開発しました。
+「勉強に集中したいのにスマホを手元におかないといけない・記録しても振り返りづらい」——資格勉強で使っていた記録モバイルアプリへの不満を、自分で解決するために開発しました。
 
 - ワンクリックでタイマーを開始・終了
 - 学習時間をカテゴリ別・日別に可視化
@@ -16,27 +16,28 @@
 
 設計・運用：Route Handler / Service / Repositoryの層分離、JWT認証、GitHub Actions、AWS EC2
 
+> 🔄 本リポジトリは **EC2運用版（v2）** です。認証を自前JWT実装に置き換える前の **v1（Supabase Auth版）** はこちら→ [🚀 デモ (Vercel)](https://my-original-app-rho.vercel.app/) ｜ [🐈‍⬛ GitHub](https://github.com/mizunatoma/OneTrack-v1-supabase)
+
 ## 📸 スクリーンショット
 
 | ログイン                                              | タイムログ                                                |
 | ----------------------------------------------------- | --------------------------------------------------------- |
 | ![ログイン画面](/public/images/screenshot-signin.png) | ![タイムログ画面](/public/images/screenshot-timeline.png) |
 
-| アナリティクス                                                 | Todoリスト（サイドパネル）                                             |
-| -------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| ![アナリティクス画面](/public/images/screenshot-analytics.png) | ![Todoリスト（サイドパネル）](/public/images/screenshot-todopanel.png) |
-
-**操作デモ（Loom）**: [Todo操作](https://www.loom.com/share/d71667f6e03240459a9c1ab7fa6e0306) / [アナリティクス](https://www.loom.com/share/b180f90524f74925a680b1db5c0332af)
+| アナリティクス                                                 | 設定（目標設定,LINE通知）                                | Todoリスト（サイドパネル）                                             |
+| -------------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------- |
+| ![アナリティクス画面](/public/images/screenshot-analytics.png) | ![設定画面](/public/images/screenshot-settings-line.png) | ![Todoリスト（サイドパネル）](/public/images/screenshot-todopanel.png) |
 
 ## ✨ 主な機能
 
-| 機能                  | 内容                                                                       |
-| --------------------- | -------------------------------------------------------------------------- |
-| ⏱️ タイムライン       | カテゴリ別タイマー記録・実行中タイマーの復元・メモ・履歴のページネーション |
-| 📊 月次アナリティクス | カテゴリ別・日別の合計時間をグラフ化                                       |
-| 📝 Todoリスト         | 複数リストの作成・並び替え・完了/削除管理（サイドパネル統合）              |
-| 🔔 LINE通知           | アカウント連携＋毎日21時に学習記録・Todo完了サマリーを自動配信             |
-| 🔐 認証               | メール/パスワード・ゲストログイン・パスワードリセット（メール送信）        |
+| 機能                  | 内容                                                                                     |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| ⏱️ タイムライン       | カテゴリ別タイマー記録・実行中タイマーの復元・メモ・履歴のページネーション               |
+| 📊 月次アナリティクス | カテゴリ別・日別の合計時間をグラフ化                                                     |
+| 📝 Todoリスト         | 複数リストの作成・並び替え・完了/削除管理（サイドパネル統合）                            |
+| 🔔 LINE通知           | アカウント連携＋毎日21時に学習記録・Todo完了サマリーを自動配信                           |
+| 🔐 認証               | メール/パスワード・ゲストログイン・パスワードリセット（メール送信）                      |
+| 🎯 学習目標           | 資格名・試験日・月間目標時間の設定、試験日カウントダウン、連続学習日数（ストリーク）表示 |
 
 ## 🛠 技術スタック
 
@@ -54,20 +55,18 @@
 
 **テスト・インフラ**: Vitest / Playwright / GitHub Actions（CI・CD）/ AWS EC2
 
-> 認証フローを自分の手で理解するため、Supabase Authから**joseを用いたJWT認証の自前実装**へ置き換えました。
-
 ---
 
 ## 📌 開発の背景
 
 資格試験の勉強時間をモバイルアプリで記録していた経験が原点です。使ううちに感じた不満を、ひとつずつ自分の手で解決しました。
 
-- スマホを手放したい → **PCブラウザで完結するWebアプリ**（スマホと併用可）
-- アナリティクスが見づらい → **自分がほしい切り口の月次グラフ**
+- スマホを手放したい → **PCブラウザで完結するWebアプリ**
+- 既存アプリは決まった集計軸しか見られず物足りない → **カテゴリ別・月別の学習時間を自分で集計・可視化するアナリティクス**
 - 今日の予定を紙に書いていた → **Todoを同一画面のサイドパネルに統合**
 - 毎日の進捗が見えることがモチベーションだった → 予定のリマインドではなく、**「今日できたこと」を毎晩LINEに通知**
 
-最初はUIモックから始めましたが、データを永続化し、自分がほしい切り口で集計するためにバックエンドとDBを学びました。この開発が、本格的にWeb開発を学ぶきっかけになっています。
+最初はUIモックから始めましたが、自分がほしい切り口で自由に集計するには、データを自前で持つ必要があり、バックエンドとDBを学びました。この開発が、本格的にWeb開発を学ぶきっかけになっています。
 
 ## 🏗 アーキテクチャ
 
@@ -103,7 +102,7 @@ MySQL
 
 ### パフォーマンス
 
-- Rechartsを**dynamic import**し、アナリティクス画面の初期JSを**220kB→104kB**に削減（`next build` 出力のFirst Load JSで前後比較）
+- Rechartsを**dynamic import**し、アナリティクス画面の初期JSを**220kB→106kB**に削減（当時の`next build`計測でのFirst Load JS比較、PR #29）
 - LINE通知処理の**N+1を解消**：ユーザーごとに通知対象データを取得していた処理を `IN` 句による一括取得へ変更し、1回の通知処理あたり**1+N回→2回に固定**
 - 履歴APIに**limit/offsetページネーション**を実装
 
@@ -121,10 +120,12 @@ MySQL
 
 <img src="public/images/screenshot-DB.png" alt="ER図（データベース設計）" width="600">
 
+- `User` / `Profile` を軸に、`Activity` `TimeLog` `TodoList` `Todo` `Goal` `LineLinkToken` を紐づける構成
 - `Activity`・`TodoList`・`Todo` に `deletedAt` を持たせ、ユーザー操作による削除を**論理削除**として実装
 - 頻出クエリを **`EXPLAIN` で確認して複合インデックスを設計**
   - `TimeLog @@index([activityId, endAt])`：カテゴリ単位の期間検索・実行中タイマー検索用
   - `TodoList @@index([profileId, deletedAt, sortOrder])`：一覧取得時のfilesort解消を確認
+  - `Todo @@index([todoListId, deletedAt, createdAt])`：リスト内Todo一覧（作成順）取得用
 - 文字列カラムは用途に応じた `VARCHAR` 長を明示
 
 **設計資料**: [ER図（Miro）](https://miro.com/app/live-embed/uXjVHNQ2Yso=/?embedMode=view_only_without_ui&moveToViewport=-854%2C-893%2C1548%2C1388&embedId=575390242521) / [画面遷移図（Figma）](https://www.figma.com/design/YJQt8LYCqSwFhkYdEs2MHG/%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB%E3%82%A2%E3%83%97%E3%83%AA?node-id=0-1&t=l5ccdrvYg4QZij3C-1)
@@ -142,7 +143,7 @@ MySQL
 src/
 ├── app/
 │   ├── api/               # Route Handlers（auth / timeline / todo-lists / todos /
-│   │                      #   analytics / profile / line / contacts）
+│   │                      #   analytics / profile / line / contacts / goal）
 │   ├── user/              # 認証済みページ（timeline / analytics / settings）
 │   ├── signin/ signup/    # 認証ページ
 │   ├── reset-password/ update-password/  # パスワードリセットフロー

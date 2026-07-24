@@ -1,9 +1,11 @@
 import {
   AlarmClock,
   BarChart2,
-  CircleCheckBig,
   Flame,
+  FolderPlus,
   MessageCircle,
+  Play,
+  UserPlus,
 } from 'lucide-react'
 import type { Metadata } from 'next'
 import Image from 'next/image' // 自動で最適化・遅延読み込み。 width と height が必須
@@ -13,16 +15,16 @@ import GuestLogin from './_components/GuestLogin'
 export const metadata: Metadata = {
   title: 'OneTrack | 資格学習のためのタイムトラッキング',
   description:
-    '開始と終了を押すだけで学習時間を記録。合格までの積み上げを見える形にする、資格学習のためのタイムトラッカー。',
+    '記録・予定・振り返りをひとつに。資格学習の積み上げを、毎日見える形に。',
   openGraph: {
     title: 'OneTrack | 資格学習のためのタイムトラッキング',
     description:
-      '開始と終了を押すだけで学習時間を記録。合格までの積み上げを見える形にする、資格学習のためのタイムトラッカー。',
+      '記録・予定・振り返りをひとつに。資格学習の積み上げを、毎日見える形に。',
     url: 'https://learning-track.com',
     siteName: 'OneTrack',
     images: [
       {
-        url: 'https://learning-track.com/images/LP_dashboard.png',
+        url: 'https://learning-track.com/images/auth-illustration.png',
         width: 1918,
         height: 941,
       },
@@ -30,6 +32,12 @@ export const metadata: Metadata = {
     locale: 'ja_JP',
     type: 'website',
   },
+}
+
+// LPヒーロー画像
+const heroScreenshot = {
+  src: '/images/screenshot-timeline.png',
+  alt: 'OneTrackの学習記録ダッシュボード',
 }
 
 const forPeople = [
@@ -58,31 +66,6 @@ const forPeople = [
   },
 ]
 
-const supportFeatures = [
-  {
-    icon: Flame,
-    iconColor: 'text-[#442427]',
-    bgColor: 'bg-[#FFDADB]',
-    title: 'ストリーク',
-    context: '連続学習日数を表示。記録を絶やさないことがモチベーションに。',
-    comingSoon: true,
-  },
-  {
-    icon: MessageCircle,
-    iconColor: 'text-[#173324]',
-    bgColor: 'bg-[#C9EAD4]',
-    title: 'LINE通知',
-    context: '毎晩、その日の学習サマリがLINEに届く。振り返りが習慣になる。',
-  },
-  {
-    icon: CircleCheckBig,
-    iconColor: 'text-[#5A6745]',
-    bgColor: 'bg-[#D7E5BB]',
-    title: 'リスト別Todo',
-    context: '科目ごとにやることを整理。次に解く問題集が明確に。',
-  },
-]
-
 // スクショを実際の画面らしく見せる ブラウザ風フレーム
 const BrowserFrame = ({ src, alt }: { src: string; alt: string }) => (
   <div className="overflow-hidden rounded-xl border-4 border-white bg-white shadow-[0_24px_60px_rgba(23,51,36,0.3)] ring-1 ring-black/10">
@@ -94,6 +77,75 @@ const BrowserFrame = ({ src, alt }: { src: string; alt: string }) => (
     <Image className="w-full" src={src} alt={alt} width={1918} height={1068} />
   </div>
 )
+
+// 「主な機能」セクション
+const features = [
+  {
+    code: '01 — TRACK',
+    title: '学習時間トラッキング',
+    description:
+      '科目を選んでスタートを押すだけ。記録の手間を最小限に、学習の実態を残します。',
+    screenshot: {
+      src: '/images/screenshot-timeline.png',
+      alt: '学習時間トラッキング画面',
+    },
+  },
+  {
+    code: '02 — ANALYZE & GOAL',
+    title: '学習の可視化と目標管理',
+    description:
+      '月次グラフで学習時間のクセを可視化。資格名・試験日・月間目標時間を設定すれば、残り日数と進捗、連続学習日数（ストリーク）もひとつの画面で確認できます。',
+    screenshot: {
+      src: '/images/screenshot-analytics.png',
+      alt: '学習アナリティクス・目標カウントダウン・ストリーク表示画面',
+    },
+  },
+  {
+    code: '03 — ORGANIZE',
+    title: '科目別Todo',
+    description:
+      '科目ごとにやることを整理。次に解く問題集が明確になり、迷わず学習に入れます。',
+    screenshot: {
+      src: '/images/screenshot-todopanel-full.png',
+      alt: '科目別Todoリストの画面',
+    },
+  },
+  {
+    code: '04 — NOTIFY',
+    title: 'LINE通知',
+    description:
+      '毎晩、その日の学習サマリがLINEに届く。記録を振り返る習慣が、自然と身につきます。',
+    screenshot: {
+      src: '/images/screenshot-settings-line.png',
+      alt: 'LINEに届く学習サマリ通知の画面',
+    },
+  },
+]
+
+const usageSteps = [
+  {
+    icon: UserPlus,
+    iconColor: 'text-[#5A6745]',
+    bgColor: 'bg-[#D7E5BB]',
+    title: 'はじめる',
+    context:
+      '新規登録、またはゲストログインならアカウント作成なしですぐに試せます。',
+  },
+  {
+    icon: FolderPlus,
+    iconColor: 'text-[#173324]',
+    bgColor: 'bg-[#C9EAD4]',
+    title: '科目を追加する',
+    context: '勉強する科目をカテゴリとして登録します。',
+  },
+  {
+    icon: Play,
+    iconColor: 'text-[#442427]',
+    bgColor: 'bg-[#FFDADB]',
+    title: '記録する',
+    context: '科目を選んでスタート。終了を押すだけで学習時間が積み上がります。',
+  },
+]
 
 export default function Home() {
   return (
@@ -131,7 +183,7 @@ export default function Home() {
               <span className="text-[#5A8B7D]">時間で測る。</span>
             </h1>
             <p className="text-lg text-[#4B4B4B]">
-              開始と終了を押すだけで学習時間を記録。合格までの積み上げを、見える形に。
+              記録・予定・振り返りをひとつに。資格学習の積み上げを、毎日見える形に。
             </p>
             <div className="mt-4 flex items-center gap-6">
               <Link
@@ -149,10 +201,7 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full flex-1 md:w-auto md:flex-[1.2]">
-            <BrowserFrame
-              src="/images/screenshot-timeline.png"
-              alt="OneTrackの学習記録ダッシュボード"
-            />
+            <BrowserFrame {...heroScreenshot} />
           </div>
         </section>
 
@@ -164,7 +213,7 @@ export default function Home() {
               OneTrack は「合格したい人」のための学習記録ツールです
             </p>
           </div>
-          <ul className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
+          <ul className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-3">
             {forPeople.map((item) => (
               <li
                 key={item.title}
@@ -184,112 +233,68 @@ export default function Home() {
 
         {/* 主な機能 */}
         <section className="mx-auto flex max-w-6xl flex-col gap-16 px-6 py-16 md:gap-24 md:px-16 md:py-24">
-          <div className="flex flex-col items-center gap-8 md:flex-row md:gap-16">
-            <div className="w-full md:flex-[1.2]">
-              <BrowserFrame
-                src="/images/screenshot-timeline.png"
-                alt="学習時間トラッキング画面"
-              />
-            </div>
-            <div className="md:flex-1">
-              <p className="mb-3 font-mono text-sm font-bold tracking-[0.2em] text-[#3D5E4E]">
-                01 — TRACK
-              </p>
-              <h2 className="mb-3 text-2xl font-semibold">
-                学習時間トラッキング
-              </h2>
-              <p className="text-[#4B4B4B]">
-                科目を選んでスタートを押すだけ。記録の手間を最小限に、学習の実態を残します。
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center gap-8 md:flex-row-reverse md:gap-16">
-            <div className="w-full md:flex-[1.2]">
-              <BrowserFrame
-                src="/images/screenshot-analytics.png"
-                alt="学習アナリティクスのグラフ"
-              />
-            </div>
-            <div className="md:flex-1">
-              <p className="mb-3 font-mono text-sm font-bold tracking-[0.2em] text-[#3D5E4E]">
-                02 — ANALYZE
-              </p>
-              <h2 className="mb-3 text-2xl font-semibold">
-                学習アナリティクス
-              </h2>
-              <p className="text-[#4B4B4B]">
-                月次グラフで学習時間のクセを可視化。「やったつもり」と実績のギャップをなくします。
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center gap-8 md:flex-row md:gap-16">
-            <div className="flex w-full justify-center md:flex-[1.2]">
-              {/* 試験日カウントダウンのモックUI */}
-              <div className="w-full max-w-md rounded-2xl bg-[#3D5E4E] p-10 text-white shadow-[0_24px_60px_rgba(61,94,78,0.25)]">
-                <p className="mb-2 font-mono text-xs tracking-[0.25em] text-white/70">
-                  GOAL
+          {features.map((feature, index) => (
+            <div
+              key={feature.code}
+              className={`flex flex-col items-center gap-8 md:gap-16 ${
+                index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+              }`}
+            >
+              <div className="w-full md:flex-[1.2]">
+                <BrowserFrame {...feature.screenshot} />
+              </div>
+              <div className="md:flex-1">
+                <p className="mb-3 font-mono text-sm font-bold tracking-[0.2em] text-[#3D5E4E]">
+                  {feature.code}
                 </p>
-                <p className="mb-4 text-lg font-bold">応用情報技術者試験</p>
-                <p className="font-mono text-4xl font-bold text-[#D8E8C2]">
-                  あと 84<span className="text-base text-white/80"> 日</span>
-                </p>
-                <div className="mt-5 h-2.5 overflow-hidden rounded-full bg-white/20">
-                  <div className="h-full w-[62%] rounded-full bg-[#D8E8C2]" />
-                </div>
-                <p className="mt-3 text-sm text-white/80">
-                  今月の学習 37 / 60 時間
-                </p>
+                <h2 className="mb-3 text-2xl font-semibold">{feature.title}</h2>
+                <p className="text-[#4B4B4B]">{feature.description}</p>
               </div>
             </div>
-            <div className="md:flex-1">
-              <p className="mb-3 font-mono text-sm font-bold tracking-[0.2em] text-[#3D5E4E]">
-                03 — GOAL
-              </p>
-              <h2 className="mb-3 flex flex-wrap items-center gap-3 text-2xl font-semibold">
-                目標と試験日カウントダウン
-                <span className="rounded-full bg-[#D8E8C2] px-3 py-1 text-xs font-bold text-[#3D5E4E]">
-                  近日追加予定
-                </span>
-              </h2>
-              <p className="text-[#4B4B4B]">
-                資格名・試験日・月間目標時間を設定できるようになります。残り日数と進捗が、毎日の一歩を後押しします。
-              </p>
-            </div>
-          </div>
+          ))}
         </section>
 
-        {/* 続ける仕組み */}
-        <section className="bg-[#5A8B7D] px-6 py-16 md:px-16 md:py-24">
-          <h2 className="mb-12 text-center text-3xl font-bold text-white">
-            学習を続けるための仕組み
-          </h2>
-          <ul className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
-            {supportFeatures.map((item) => (
+        {/* 使い方 */}
+        <section className="bg-[#5A8B7D] px-6 py-10 md:px-16 md:py-14">
+          <div className="mb-8 text-center">
+            <h2 className="mb-2 text-3xl font-bold text-white">
+              使い方は3ステップ
+            </h2>
+            <p className="text-white/80">
+              むずかしい設定はありません。今日から始められます
+            </p>
+          </div>
+          <ul className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-3">
+            {usageSteps.map((item, index) => (
               <li
                 key={item.title}
-                className="flex gap-4 rounded-xl bg-white p-6 shadow-lg"
+                className="flex flex-col gap-3 rounded-xl bg-white p-7 shadow-lg"
               >
                 <div
-                  className={`inline-flex size-fit items-center rounded-xl p-3 ${item.bgColor}`}
+                  className={`inline-flex w-fit items-center rounded-xl p-3 ${item.bgColor}`}
                 >
                   <item.icon className={item.iconColor} size={22} />
                 </div>
-                <div>
-                  <h3 className="mb-1 flex items-center gap-2 font-bold">
-                    {item.title}
-                    {item.comingSoon && (
-                      <span className="rounded-full bg-[#D8E8C2] px-2.5 py-0.5 text-[11px] font-bold text-[#3D5E4E]">
-                        近日追加予定
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-sm text-[#4B4B4B]">{item.context}</p>
-                </div>
+                <h3 className="font-bold">
+                  <span className="mr-1.5 font-mono text-xs font-bold text-[#3D5E4E]">
+                    STEP {index + 1}
+                  </span>
+                  {item.title}
+                </h3>
+                <p className="text-[#4B4B4B]">{item.context}</p>
               </li>
             ))}
           </ul>
+
+          {/* 振り返る */}
+          <div className="mx-auto mt-6 flex max-w-5xl items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/10 px-6 py-4">
+            <BarChart2 className="shrink-0 text-white" size={20} />
+            <span className="shrink-0 text-white/60">→</span>
+            <MessageCircle className="shrink-0 text-white" size={20} />
+            <p className="text-white">
+              アナリティクスで振り返り、LINE通知が次の一歩を後押しします。
+            </p>
+          </div>
         </section>
 
         {/* CTA */}
