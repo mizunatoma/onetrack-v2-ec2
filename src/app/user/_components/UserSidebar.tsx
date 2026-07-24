@@ -83,10 +83,10 @@ export default function UserSidebar({
 
         <button
           onClick={toggleTodoPanel}
-          className={`flex h-12 items-center gap-3 rounded-xl transition-all ${isSideBarOpen ? 'px-3' : 'justify-center'} ${
+          className={`mt-4 flex h-12 items-center gap-3 rounded-xl transition-all ${isSideBarOpen ? 'px-3' : 'justify-center'} ${
             isTodoPanelOpen
-              ? 'bg-[#5D866C]/50 text-gray-800 shadow-sm'
-              : 'text-gray-500 hover:bg-[#5D866C]/30'
+              ? 'bg-amber-400/25 text-gray-800 shadow-sm'
+              : 'text-gray-500 hover:bg-amber-400/15'
           }`}
         >
           <div

@@ -5,7 +5,7 @@ import { GetAnalyticsResponse, GoalResponse } from '@/types/api'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
-import Skelton from './Skelton'
+import Skelton from '@/app/user/_components/Skelton'
 
 // 重いRechartsを初回バンドルから分離し、この画面を開いた時だけ読み込む（dynamic import）
 const AnalyticsCharts = dynamic(() => import('./AnalyticsCharts'), {

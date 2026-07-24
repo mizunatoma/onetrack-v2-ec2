@@ -25,11 +25,17 @@ export const todoListRepository = {
   },
 
   async create(name: string, profileId: string) {
+    // countだと削除で件数が減るたびに値が小さくなり、既存の最大値を追い越せなくなる
+    // 常に末尾に追加するには「これまでの最大sortOrder + 1」を使う
+    const maxOrder = await prisma.todoList.aggregate({
+      where: { profileId, deletedAt: null },
+      _max: { sortOrder: true },
+    })
     const todoList = await prisma.todoList.create({
       data: {
         name,
         profileId,
-        sortOrder: 0,
+        sortOrder: (maxOrder._max.sortOrder ?? -1) + 1,
       },
     })
     return todoList

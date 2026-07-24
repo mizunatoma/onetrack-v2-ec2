@@ -28,7 +28,7 @@ test('新規登録後ログインし、そのままCategoryを追加・Tracking�
   await page.getByRole('button', { name: 'ログイン' }).click()
   await expect(page).toHaveURL('/user/timeline')
   // 3. category を作成
-  await page.getByRole('button', { name: '追加' }).click()
+  await page.getByRole('button', { name: '追加', exact: true }).click() // exact: true => 完全一致
   await page.getByPlaceholder("Category's name").fill('TestCategory')
   await page.getByRole('button', { name: '保存' }).click()
   // 4. Tracking を開始
