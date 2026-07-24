@@ -82,7 +82,7 @@ export const GoalNameSetting = () => {
               <Input
                 id="qualificationName"
                 disabled={isSubmitting}
-                placeholder="ITパスポート"
+                placeholder="基本情報技術者試験"
                 className="flex-1"
                 {...register('qualificationName')}
               />
