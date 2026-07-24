@@ -3,10 +3,10 @@ import { toJstParts } from '@/app/_utils/format'
 import { Card, CardContent } from '@/components/ui/card'
 import { GetAnalyticsResponse, GoalResponse } from '@/types/api'
 import { useState } from 'react'
-import AnalyticsData from '../_components/AnalyticsData'
-import GoalCard from '../_components/GoalCard'
 import Skelton from '../_components/Skelton'
 import { useFetch } from '../_hooks/useFetch'
+import AnalyticsData from './_components/AnalyticsData'
+import GoalCard from './_components/GoalCard'
 
 export default function Page() {
   const [currentDate, setCurrentDate] = useState(new Date())
