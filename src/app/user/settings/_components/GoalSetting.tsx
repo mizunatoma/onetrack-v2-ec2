@@ -60,7 +60,7 @@ export const GoalNameSetting = () => {
   return (
     <Card className="max-w-md">
       <CardHeader>
-        <CardTitle>🚩目標 を編集</CardTitle>
+        <CardTitle>目標を編集</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -82,7 +82,7 @@ export const GoalNameSetting = () => {
               <Input
                 id="qualificationName"
                 disabled={isSubmitting}
-                placeholder="基本情報技術者試験"
+                placeholder="ITパスポート"
                 className="flex-1"
                 {...register('qualificationName')}
               />
