@@ -39,12 +39,12 @@ export default function Page() {
         body: JSON.stringify({ email, password, confirmPassword }),
       })
       if (!res.ok) {
-        alert('登録に失敗しました')
+        toast.error('登録に失敗しました')
         return
       }
       reset()
       router.push('/signin')
-      alert('アカウントを作成しました')
+      toast.success('アカウントを作成しました')
     } catch (error) {
       console.log(error)
     }

@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 type Props = {
   label: string
@@ -19,7 +20,7 @@ export default function GuestLogin({ label, className }: Props) {
         headers: { 'Content-Type': 'application/json' },
       })
       if (!res.ok) {
-        alert('ログインに失敗しました')
+        toast.error('ログインに失敗しました')
         return
       }
       router.replace('/user/timeline')
