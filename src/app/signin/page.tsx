@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { FormButton } from '../../components/form/FormButton'
 import OrDivider from '../../components/form/OrDivider'
 import AuthLayout from '../_components/AuthLayout'
@@ -33,7 +34,7 @@ export default function Page() {
         body: JSON.stringify({ email, password }),
       })
       if (!res.ok) {
-        alert('ログインに失敗しました')
+        toast.error('ログインに失敗しました')
         return
       }
       router.replace('/user/timeline')
