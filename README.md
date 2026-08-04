@@ -113,6 +113,12 @@ npm run test:e2e   # E2E（Playwright、初回のみ npx playwright install が�
 
 ## アーキテクチャ
 
+### システム構成
+
+<img src="public/images/architecture.svg" alt="システム構成図" width="900">
+
+### レイヤ構成
+
 Next.js App RouterのRoute Handlersを、**Route Handler・Service・Repositoryの3層**に分けています。
 
 ```
@@ -134,25 +140,9 @@ MySQL
 
 </details>
 
-## システム構成・デプロイ
+## デプロイ・運用
 
 **AWS EC2**（PM2 + Nginx + SSL）で運用。GitHub Actionsにより `release` ブランチへのpushを契機に自動デプロイされます。
-
-```mermaid
-flowchart LR
-  U["ユーザー（ブラウザ）"] -->|HTTPS| N
-
-  subgraph EC2["AWS EC2"]
-    N["Nginx（リバースプロキシ・SSL終端）"] --> A["Next.js（PM2で常駐）"]
-    A --> DB[("MySQL")]
-    A --> CRON["node-cron（毎日21時）"]
-  end
-
-  CRON -->|学習サマリー配信| LINE["LINE Messaging API"]
-  A -->|パスワードリセットメール| RESEND["Resend"]
-
-  GH["GitHub Actions（CD）"] -.->|releaseブランチへのpushでSSH自動デプロイ| EC2
-```
 
 - **CI**: `main` 向けPRで lint / 単体テスト / build / E2E（使い捨てMySQLコンテナ）を自動実行
 - **CD**: デプロイ時のみGitHub ActionsランナーのIPをセキュリティグループの22番ポートに一時許可し、完了後に必ず削除（SSHポートを常時開放しない運用）
