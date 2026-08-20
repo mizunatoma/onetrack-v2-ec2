@@ -1,61 +1,3 @@
-## ◽️ 開発者向け情報
-
-前提: Node.js 22 / MySQL 8（CI・本番と同一バージョン）
-
-<details>
-<summary><b>セットアップ手順・環境変数</b></summary>
-
-```bash
-# 1. 依存パッケージのインストール
-npm install
-
-# 2. 環境変数の設定（.env.example をコピーして各値を設定）
-
-cp .env.example .env
-
-# 3. マイグレーション適用
-
-npx prisma migrate dev
-
-# 4. seed投入（ゲストユーザー・デモデータ）
-
-npx prisma db seed
-
-# 5. 開発サーバー起動 → http://localhost:3000
-
-npm run dev
-
-```
-
-</details>
-
-<details>
-<summary><b>テスト</b></summary>
-
-```bash
-npm run test:run   # 単体テスト（Vitest）
-npm run test:e2e   # E2E（Playwright、初回のみ npx playwright install が必要）
-```
-
-</details>
-
-<details>
-<summary><b>環境変数一覧</b></summary>
-
-| 変数                                                | 用途                                     |
-| --------------------------------------------------- | ---------------------------------------- |
-| `DATABASE_URL`                                      | MySQLの接続文字列                        |
-| `JWT_SECRET`                                        | JWT署名用のシークレット                  |
-| `RESEND_API_KEY` / `EMAIL_FROM`                     | パスワードリセットメールの送信（Resend） |
-| `GUEST_EMAIL` / `GUEST_PASSWORD`                    | ゲストログイン用アカウント（seedと一致） |
-| `NEXT_PUBLIC_SITE_URL`                              | メール内リンクなどに使用するサイトURL    |
-| `LINE_CHANNEL_ACCESS_TOKEN` / `LINE_CHANNEL_SECRET` | LINE Messaging API（通知配信・連携）     |
-| `NEXT_PUBLIC_LINE_ADD_FRIEND_URL`                   | LINE友だち追加ボタンのURL                |
-
-</details>
-
----
-
 ## ◽️ 利用者向け情報
 
 **タイマー記録とTodo管理を同一画面にまとめ、学習時間の記録から月次の振り返りまで行えるWebアプリ「OneTrack (v2)」**
@@ -94,7 +36,65 @@ npm run test:e2e   # E2E（Playwright、初回のみ npx playwright install が�
 | ![設定画面](/public/images/screenshot-settings.png)                                                                                                                       | ![LINE連携後の配信例](/public/images/line-notify-example.png)                                                                                                                           |
 | 表示名の編集、学習目標（資格名・試験日・目標学習時間）、LINE連携の設定をまとめた画面です。LINE連携は「友だち追加 → トークン発行 → トークで送信」の3ステップで完了します。 | 毎日21時に、その日の学習記録とTodo完了サマリーをLINEへ自動配信します（node-cronによるスケジュール実行）。「今日できたこと」が毎晩届くことで、学習継続のモチベーションにつなげています。 |
 
-## 技術スタック
+---
+
+## ◽️ 開発者向け情報
+
+前提: Node.js 22 / MySQL 8（CI・本番と同一バージョン）
+
+<details>
+<summary>セットアップ手順・環境変数</summary>
+
+```bash
+# 1. 依存パッケージのインストール
+npm install
+
+# 2. 環境変数の設定（.env.example をコピーして各値を設定）
+
+cp .env.example .env
+
+# 3. マイグレーション適用
+
+npx prisma migrate dev
+
+# 4. seed投入（ゲストユーザー・デモデータ）
+
+npx prisma db seed
+
+# 5. 開発サーバー起動 → http://localhost:3000
+
+npm run dev
+
+```
+
+</details>
+
+<details>
+<summary>テスト</summary>
+
+```bash
+npm run test:run   # 単体テスト（Vitest）
+npm run test:e2e   # E2E（Playwright、初回のみ npx playwright install が必要）
+```
+
+</details>
+
+<details>
+<summary>環境変数一覧</summary>
+
+| 変数                                                | 用途                                     |
+| --------------------------------------------------- | ---------------------------------------- |
+| `DATABASE_URL`                                      | MySQLの接続文字列                        |
+| `JWT_SECRET`                                        | JWT署名用のシークレット                  |
+| `RESEND_API_KEY` / `EMAIL_FROM`                     | パスワードリセットメールの送信（Resend） |
+| `GUEST_EMAIL` / `GUEST_PASSWORD`                    | ゲストログイン用アカウント（seedと一致） |
+| `NEXT_PUBLIC_SITE_URL`                              | メール内リンクなどに使用するサイトURL    |
+| `LINE_CHANNEL_ACCESS_TOKEN` / `LINE_CHANNEL_SECRET` | LINE Messaging API（通知配信・連携）     |
+| `NEXT_PUBLIC_LINE_ADD_FRIEND_URL`                   | LINE友だち追加ボタンのURL                |
+
+</details>
+
+## 🛠️ 技術スタック
 
 | カテゴリ       | 技術                                                      |
 | -------------- | --------------------------------------------------------- |
@@ -110,26 +110,12 @@ npm run test:e2e   # E2E（Playwright、初回のみ npx playwright install が�
 
 **テスト・インフラ**: Vitest / Playwright / GitHub Actions（CI・CD）/ AWS EC2
 
-## システム構成・デプロイ
+## 🚀 システム構成・デプロイ
 
-```mermaid
-flowchart LR
-  U["ユーザー（ブラウザ）"] -->|HTTPS| N
-
-  subgraph EC2["AWS EC2"]
-    N["Nginx（リバースプロキシ・SSL終端）"] --> A["Next.js（PM2で常駐）"]
-    A --> DB[("MySQL")]
-    A --> CRON["node-cron（毎日21時）"]
-  end
-
-  CRON -->|学習サマリー配信| LINE["LINE Messaging API"]
-  A -->|パスワードリセットメール| RESEND["Resend"]
-
-  GH["GitHub Actions（CD）"] -.->|releaseブランチへのpushでSSH自動デプロイ| EC2
-```
+<img src="public/images/architecture.svg" alt="システム構成図" width="900">
 
 <details>
-<summary><b>詳細</b></summary>
+<summary>詳細</summary>
 
 - **AWS EC2**（PM2 + Nginx + SSL）で運用。GitHub Actionsにより `release` ブランチへのpushを契機に自動デプロイされます。
 - **CI**: `main` 向けPRで lint / 単体テスト / build / E2E（使い捨てMySQLコンテナ）を自動実行
@@ -138,7 +124,7 @@ flowchart LR
 
 </details>
 
-## データベース設計
+## 🗄️ データベース設計
 
 ```mermaid
 erDiagram
@@ -244,7 +230,7 @@ erDiagram
 ```
 
 <details>
-<summary><b>詳細</b></summary>
+<summary>詳細</summary>
 
 ※ `Routine` / `RoutineItem` / `RoutineState` はルーティン機能用のスキーマですが、機能自体は未実装です（詳細は「今後の改善」を参照）。
 
@@ -260,12 +246,14 @@ erDiagram
 
 **設計資料**: [ER図（Miro）](https://miro.com/app/live-embed/uXjVHNQ2Yso=/?embedMode=view_only_without_ui&moveToViewport=-854%2C-893%2C1548%2C1388&embedId=575390242521) / [画面遷移図（Figma）](https://www.figma.com/design/YJQt8LYCqSwFhkYdEs2MHG/%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB%E3%82%A2%E3%83%97%E3%83%AA?node-id=0-1&t=l5ccdrvYg4QZij3C-1)
 
-## アーキテクチャ
+## 🏛️ アーキテクチャ
 
-Next.js App RouterのRoute Handlersを、**Route Handler・Service・Repositoryの3層**に分けています。
+Next.js App Routerの実装に**レイヤードアーキテクチャ**を採用し、**Route Handler・Service・Repository**の3層に分けています。
 
 <details>
 <summary>詳細</summary>
+
+### レイヤ構成
 
 ```
 Route Handler   … Zodによる入力検証・HTTPステータスの決定
@@ -276,6 +264,8 @@ Repository      … Prismaによる DB アクセス
       ↓
 MySQL
 ```
+
+### ディレクトリ構成
 
 ```
 src/
@@ -305,10 +295,10 @@ e2e/                       # Playwright E2E（認証フロー）
 
 </details>
 
-## 工夫したポイント
+## 💡 工夫したポイント
 
 <details>
-<summary><b>型安全・バリデーション</b></summary>
+<summary>型安全・バリデーション</summary>
 
 - Zodスキーマを**API入力検証とReact Hook Formのresolverで共用**し、検証ルールの二重管理を排除
 - APIレスポンスのDTO型を `src/types/api.ts` に集約し、フロント/バックで同じ型を参照
@@ -316,7 +306,7 @@ e2e/                       # Playwright E2E（認証フロー）
 </details>
 
 <details>
-<summary><b>セキュリティ</b></summary>
+<summary>セキュリティ</summary>
 
 - JWTを **HttpOnly / Secure（本番環境） / SameSite=Strict** のCookieで管理。middlewareに認証不要パスを列挙し、**それ以外のページ・APIをJWT検証の対象**に設定
 - ログイン失敗時はメール不存在・パスワード不一致とも**同一の401**を返却（アカウント列挙対策）
@@ -324,7 +314,7 @@ e2e/                       # Playwright E2E（認証フロー）
 </details>
 
 <details>
-<summary><b>パフォーマンス</b></summary>
+<summary>パフォーマンス</summary>
 
 - Rechartsを**dynamic import**し、アナリティクス画面の初期JSを**220kB→106kB**に削減（当時の`next build`計測でのFirst Load JS比較、PR #29）
 - LINE通知処理の**N+1を解消**：ユーザーごとに通知対象データを取得していた処理を `IN` 句による一括取得へ変更し、1回の通知処理あたり**1+N回→2回に固定**
@@ -333,18 +323,18 @@ e2e/                       # Playwright E2E（認証フロー）
 </details>
 
 <details>
-<summary><b>テスト</b></summary>
+<summary>テスト</summary>
 
 - **Vitest**（Zodスキーマ・Service層・カスタムフックの単体テスト）＋ **Playwright**（認証フローのE2E）
 
 </details>
 
-## 今後の改善
+## 🔭 今後の改善
 
 - **Googleログイン（OAuth）**: 外部認証の導入でログインの手間を減らす
 - **レスポンシブ対応・PWA通知**: スマホでの利用体験の底上げ
 - **ルーティン機能**: Prismaスキーマに `Routine` 系モデルは定義済みだが、コア機能（タイマー・分析・通知）の完成度を優先するため、API・画面の実装はあえてスコープ外とした
 
-## 過去Versionについて
+## 📜 過去Versionについて
 
 > 本リポジトリは **EC2運用版**のver.2です。ver.1となる**Supabase×Vercel版** はこちら → [デモ画面](https://my-original-app-rho.vercel.app/) ｜ [GitHub](https://github.com/mizunatoma/OneTrack-v1-supabase)
