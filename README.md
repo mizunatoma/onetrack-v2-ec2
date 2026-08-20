@@ -1,28 +1,4 @@
-# OneTrack (v2)
-
-**タイマー記録とTodo管理を同一画面にまとめ、学習時間の記録から月次の振り返りまで行えるWebアプリ**
-
-[アプリを試す](https://learning-track.com) ｜ [操作デモを見る（Loom）](https://www.loom.com/share/870cd9472a42497fb2e5c40a7f09a233)
-
-> 登録不要のゲストログインで、デモデータをすぐに操作できます。
-
-![トップページ（LP）](/public/images/screenshot-lp.png)
-
-「勉強に集中したいのにスマホを手元におかないといけない・記録しても振り返りづらい」——資格勉強で使っていた記録モバイルアプリへの不満を、自分で解決するために開発しました。
-
-- ワンクリックでタイマーを開始・終了
-- 学習時間をカテゴリ別・日別に可視化
-- 毎日21時に、その日の学習実績をLINEへ通知
-
-`Next.js 14` `TypeScript` `Prisma` `MySQL`
-
-設計・運用：Route Handler / Service / Repositoryの層分離、JWT認証、GitHub Actions、AWS EC2
-
-> 本リポジトリは **EC2運用版（v2）** です。認証を自前JWT実装に置き換える前の **v1（Supabase Auth版）** はこちら → [デモ（Vercel）](https://my-original-app-rho.vercel.app/) ｜ [GitHub](https://github.com/mizunatoma/OneTrack-v1-supabase)
-
----
-
-## 開発者向け情報
+## ◽️ 開発者向け情報
 
 前提: Node.js 22 / MySQL 8（CI・本番と同一バージョン）
 
@@ -34,26 +10,37 @@
 npm install
 
 # 2. 環境変数の設定（.env.example をコピーして各値を設定）
+
 cp .env.example .env
 
 # 3. マイグレーション適用
+
 npx prisma migrate dev
 
 # 4. seed投入（ゲストユーザー・デモデータ）
+
 npx prisma db seed
 
 # 5. 開発サーバー起動 → http://localhost:3000
+
 npm run dev
+
 ```
 
-**テスト**
+</details>
+
+<details>
+<summary><b>テスト</b></summary>
 
 ```bash
 npm run test:run   # 単体テスト（Vitest）
 npm run test:e2e   # E2E（Playwright、初回のみ npx playwright install が必要）
 ```
 
-**環境変数一覧**
+</details>
+
+<details>
+<summary><b>環境変数一覧</b></summary>
 
 | 変数                                                | 用途                                     |
 | --------------------------------------------------- | ---------------------------------------- |
@@ -67,33 +54,45 @@ npm run test:e2e   # E2E（Playwright、初回のみ npx playwright install が�
 
 </details>
 
+---
+
+## ◽️ 利用者向け情報
+
+**タイマー記録とTodo管理を同一画面にまとめ、学習時間の記録から月次の振り返りまで行えるWebアプリ「OneTrack (v2)」**
+
+[アプリを試す](https://learning-track.com) ｜ [操作デモを見る（Loom）](https://www.loom.com/share/870cd9472a42497fb2e5c40a7f09a233)
+
+> 登録不要のゲストログインで、デモデータをすぐに操作できます。
+
+![トップページ（LP）](/public/images/screenshot-lp.png)
+
 ## 開発の背景
 
-資格試験の勉強時間をモバイルアプリで記録していた経験が原点です。使ううちに感じた不満を、ひとつずつ自分の手で解決しました。
+資格学習の際に使用していたモバイルアプリへの不満を、ひとつずつ自分で解決するために開発しました。
 
-- スマホを手放したい → **PCブラウザで完結するWebアプリ**
-- 既存アプリは決まった集計軸しか見られず物足りない → **カテゴリ別・月別の学習時間を自分で集計・可視化するアナリティクス**
-- 今日の予定を紙に書いていた → **Todoを同一画面のサイドパネルに統合**
-- 毎日の進捗が見えることがモチベーションだった → 予定のリマインドではなく、**「今日できたこと」を毎晩LINEに通知**
-
-最初はUIモックから始めましたが、自分がほしい切り口で自由に集計するには、データを自前で持つ必要があり、バックエンドとDBを学びました。この開発が、本格的にWeb開発を学ぶきっかけになっています。
+<table>
+<tr><td>モバイルアプリでは学習中にスマホを手元に置かないといけない</td><td>→ <strong>PCブラウザで完結するWebアプリ</strong></td></tr>
+<tr><td>既存アプリは決まった集計軸しか見られず物足りない</td><td>→ <strong>カテゴリ別・月別の学習時間を自分で集計・可視化するアナリティクス</strong></td></tr>
+<tr><td>今日の予定を紙に書き、別で管理する必要があった</td><td>→ <strong>Todoを同一画面のサイドパネルに統合</strong></td></tr>
+<tr><td>毎日の進捗が見えることがモチベーションだった</td><td>→ 予定のリマインドではなく、<strong>今日できたこと</strong>を毎晩LINE通知</td></tr>
+</table>
 
 ## 機能紹介
 
-| ログイン画面                                                                                                                                                             | タイムライン画面                                                                                                                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![ログイン画面](/public/images/screenshot-signin.png)                                                                                                                    | ![タイムライン画面](/public/images/screenshot-timeline.png)                                                                                                                                                                              |
-| **ゲストで見る**ボタンを設置し、登録不要の1クリックでデモデータ入りの環境を試せるようにしました。メール/パスワード認証・新規登録・パスワードリセットにも対応しています。 | 学習記録のメイン画面です。カテゴリを選んでワンクリックでタイマーを開始・停止でき、記録は時間軸上に色分け表示されます。リロードしても実行中タイマーは復元され、カテゴリ管理・メモ付き履歴（ページネーション付き）もこの画面で完結します。 |
+| ログイン画面                                                                                                                                                                                                          | タイムライン画面                                                                                                                                                                                                                         |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![ログイン画面](/public/images/screenshot-signin.png)                                                                                                                                                                 | ![タイムライン画面](/public/images/screenshot-timeline.png)                                                                                                                                                                              |
+| トップページ(/)のLPから遷移した後の画面です。**ゲストで見る**ボタンを設置し、登録不要の1クリックでデモデータ入りの環境を試せるようにしました。メール/パスワード認証・新規登録・パスワードリセットにも対応しています。 | 学習記録のメイン画面です。カテゴリを選んでワンクリックでタイマーを開始・停止でき、記録は時間軸上に色分け表示されます。リロードしても実行中タイマーは復元され、カテゴリ管理・メモ付き履歴（ページネーション付き）もこの画面で完結します。 |
 
-| アナリティクス画面                                                                                                                                                                                 | Todoリスト（サイドパネル）                                                                                                                                                               |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![アナリティクス画面](/public/images/screenshot-analytics.png)                                                                                                                                     | ![Todoリスト（サイドパネル）](/public/images/screenshot-todopanel.png)                                                                                                                   |
-| 月次の学習時間をカテゴリ別に棒グラフ・円グラフで可視化します。学習目標を設定すると、試験日までのカウントダウン・目標達成率・連続学習日数（ストリーク）が表示され、学習ペースを一目で把握できます。 | どの画面からでも開けるサイドパネルにTodoを統合し、タイマーで記録しながら今日のタスクを確認できます。複数リストの作成・切り替え・並び替え、Todoの追加・完了・編集・削除に対応しています。 |
+| アナリティクス画面                                                                                                                                                                                 | Todoリスト（サイドパネル）                                                                                                                                                                     |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![アナリティクス画面](/public/images/screenshot-analytics.png)                                                                                                                                     | ![Todoリスト（サイドパネル）](/public/images/screenshot-todopanel.png)                                                                                                                         |
+| 月次の学習時間をカテゴリ別に棒グラフ・円グラフで可視化します。学習目標を設定すると、試験日までのカウントダウン・目標達成率・連続学習日数（ストリーク）が表示され、学習ペースを一目で把握できます。 | どの画面からでも開けるサイドパネルにTodoリストを設置し、タイマーで記録しながら今日のタスクを確認できます。複数リストの作成・切り替え・並び替え、Todoの追加・完了・編集・削除に対応しています。 |
 
 | 設定画面                                                                                                                                                                  | LINE通知                                                                                                                                                                                |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![設定画面](/public/images/screenshot-settings.png)                                                                                                                       | ![LINE通知の配信例](/public/images/line-notify-example.png)                                                                                                                             |
-| 表示名の編集、学習目標（資格名・試験日・目標学習時間）の設定、LINE連携をまとめた画面です。LINE連携は「友だち追加 → トークン発行 → トークで送信」の3ステップで完了します。 | 毎日21時に、その日の学習記録とTodo完了サマリーをLINEへ自動配信します（node-cronによるスケジュール実行）。「今日できたこと」が毎晩届くことで、学習継続のモチベーションにつなげています。 |
+| ![設定画面](/public/images/screenshot-settings.png)                                                                                                                       | ![LINE連携後の配信例](/public/images/line-notify-example.png)                                                                                                                           |
+| 表示名の編集、学習目標（資格名・試験日・目標学習時間）、LINE連携の設定をまとめた画面です。LINE連携は「友だち追加 → トークン発行 → トークで送信」の3ステップで完了します。 | 毎日21時に、その日の学習記録とTodo完了サマリーをLINEへ自動配信します（node-cronによるスケジュール実行）。「今日できたこと」が毎晩届くことで、学習継続のモチベーションにつなげています。 |
 
 ## 技術スタック
 
@@ -111,46 +110,35 @@ npm run test:e2e   # E2E（Playwright、初回のみ npx playwright install が�
 
 **テスト・インフラ**: Vitest / Playwright / GitHub Actions（CI・CD）/ AWS EC2
 
-## アーキテクチャ
+## システム構成・デプロイ
 
-### システム構成
+```mermaid
+flowchart LR
+  U["ユーザー（ブラウザ）"] -->|HTTPS| N
 
-<img src="public/images/architecture.svg" alt="システム構成図" width="900">
+  subgraph EC2["AWS EC2"]
+    N["Nginx（リバースプロキシ・SSL終端）"] --> A["Next.js（PM2で常駐）"]
+    A --> DB[("MySQL")]
+    A --> CRON["node-cron（毎日21時）"]
+  end
 
-### レイヤ構成
+  CRON -->|学習サマリー配信| LINE["LINE Messaging API"]
+  A -->|パスワードリセットメール| RESEND["Resend"]
 
-Next.js App RouterのRoute Handlersを、**Route Handler・Service・Repositoryの3層**に分けています。
-
-```
-Route Handler   … Zodによる入力検証・HTTPステータスの決定
-      ↓
-Service         … ビジネスロジック
-      ↓
-Repository      … Prismaによる DB アクセス
-      ↓
-MySQL
+  GH["GitHub Actions（CD）"] -.->|releaseブランチへのpushでSSH自動デプロイ| EC2
 ```
 
 <details>
-<summary><b>分けた経緯</b></summary>
+<summary><b>詳細</b></summary>
 
-- 当初はRoute Handlerにすべてをフラットに書いていましたが、同じ処理の重複が増え「一箇所直すと全部直す」手間が発生。責務ごとに分離して解消しました。
-- 分離によって各層の入出力が明確になり、主要なビジネスロジックが**Vitestで単体テストしやすくなった**のも実感した利点です。
-- 認証Serviceには現在Next.jsのCookie APIへの依存が残っており、Cookie操作をRoute Handler側へ寄せるのが今後の改善テーマです。
-
-</details>
-
-## デプロイ・運用
-
-**AWS EC2**（PM2 + Nginx + SSL）で運用。GitHub Actionsにより `release` ブランチへのpushを契機に自動デプロイされます。
-
+- **AWS EC2**（PM2 + Nginx + SSL）で運用。GitHub Actionsにより `release` ブランチへのpushを契機に自動デプロイされます。
 - **CI**: `main` 向けPRで lint / 単体テスト / build / E2E（使い捨てMySQLコンテナ）を自動実行
 - **CD**: デプロイ時のみGitHub ActionsランナーのIPをセキュリティグループの22番ポートに一時許可し、完了後に必ず削除（SSHポートを常時開放しない運用）
 - seedでゲストユーザー・デモデータを投入し、レビュアーがすぐ試せる状態を担保
 
-## データベース設計
+</details>
 
-ER図（Mermaid）
+## データベース設計
 
 ```mermaid
 erDiagram
@@ -159,8 +147,11 @@ erDiagram
   Profile ||--o{ TodoList : has
   Profile ||--o| Goal : has
   Profile ||--o| LineLinkToken : has
+  Profile ||--o{ Routine : has
   Activity ||--o{ TimeLog : has
   TodoList ||--o{ Todo : has
+  Routine ||--o{ RoutineItem : has
+  Routine ||--o| RoutineState : has
 
   User {
     string id PK
@@ -218,12 +209,44 @@ erDiagram
     string token UK
     datetime expireAt
   }
+  Routine {
+    string id PK
+    string profileId FK
+    string name
+    string frequency
+    string colorToken
+    int weekStart
+    int sortOrder
+    datetime deletedAt
+  }
+  RoutineItem {
+    string id PK
+    string routineId FK
+    string title
+    boolean ischecked
+    datetime doneAt
+    datetime checkedAt
+    int sortOrder
+    datetime deletedAt
+  }
+  RoutineState {
+    string id PK
+    string routineId FK
+    datetime periodStartedAt
+    datetime lastResetAt
+  }
+  Contacts {
+    string id PK
+    string name
+    string email
+    string message
+  }
 ```
 
 <details>
 <summary><b>詳細</b></summary>
 
-※ 上記のほかに `Contacts`（お問い合わせ）と、未実装のルーティン機能用 `Routine` / `RoutineItem` / `RoutineState` を定義しています。
+※ `Routine` / `RoutineItem` / `RoutineState` はルーティン機能用のスキーマですが、機能自体は未実装です（詳細は「今後の改善」を参照）。
 
 - `User` / `Profile` を軸に、`Activity` `TimeLog` `TodoList` `Todo` `Goal` `LineLinkToken` を紐づける構成
 - `Activity`・`TodoList`・`Todo` に `deletedAt` を持たせ、ユーザー操作による削除を**論理削除**として実装
@@ -236,6 +259,51 @@ erDiagram
 </details>
 
 **設計資料**: [ER図（Miro）](https://miro.com/app/live-embed/uXjVHNQ2Yso=/?embedMode=view_only_without_ui&moveToViewport=-854%2C-893%2C1548%2C1388&embedId=575390242521) / [画面遷移図（Figma）](https://www.figma.com/design/YJQt8LYCqSwFhkYdEs2MHG/%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB%E3%82%A2%E3%83%97%E3%83%AA?node-id=0-1&t=l5ccdrvYg4QZij3C-1)
+
+## アーキテクチャ
+
+Next.js App RouterのRoute Handlersを、**Route Handler・Service・Repositoryの3層**に分けています。
+
+<details>
+<summary>詳細</summary>
+
+```
+Route Handler   … Zodによる入力検証・HTTPステータスの決定
+      ↓
+Service         … ビジネスロジック
+      ↓
+Repository      … Prismaによる DB アクセス
+      ↓
+MySQL
+```
+
+```
+src/
+├── app/
+│   ├── api/               # Route Handlers（auth / timeline / todo-lists / todos /
+│   │                      #   analytics / profile / line / contacts / goal）
+│   ├── user/              # 認証済みページ（timeline / analytics / settings）
+│   ├── signin/ signup/    # 認証ページ
+│   ├── reset-password/ update-password/  # パスワードリセットフロー
+│   ├── contact/           # コンタクトフォーム
+│   ├── _lib/              # JWT発行・検証（jose）
+│   └── _utils/            # Prismaクライアント / 認証ユーザー取得 / フォーマッタ
+├── services/              # ビジネスロジック層
+├── repositories/          # DBアクセス層（Prisma）
+├── schemas/               # Zodスキーマ（API・フォーム共用）
+├── types/                 # APIレスポンスのDTO型定義
+├── store/                 # Zustand（ログインユーザー情報）
+├── hooks/                 # 汎用フック（useDebounce / useLocalStorage、テスト付き）
+├── components/            # shadcn/ui・フォーム共通コンポーネント
+├── lib/                   # LINE Messaging API / winston logger / utils
+├── middleware.ts          # JWT検証によるルート保護（ホワイトリスト方式）
+└── instrumentation.ts     # node-cronの登録（サーバ起動時）
+prisma/                    # schema / migrations / seed（ゲスト・デモデータ投入）
+e2e/                       # Playwright E2E（認証フロー）
+.github/workflows/         # CI（lint / test / build / E2E）・CD（EC2自動デプロイ）
+```
+
+</details>
 
 ## 工夫したポイント
 
@@ -271,41 +339,12 @@ erDiagram
 
 </details>
 
-## ディレクトリ構成
-
-<details>
-<summary>クリックで展開</summary>
-
-```
-src/
-├── app/
-│   ├── api/               # Route Handlers（auth / timeline / todo-lists / todos /
-│   │                      #   analytics / profile / line / contacts / goal）
-│   ├── user/              # 認証済みページ（timeline / analytics / settings）
-│   ├── signin/ signup/    # 認証ページ
-│   ├── reset-password/ update-password/  # パスワードリセットフロー
-│   ├── contact/           # コンタクトフォーム
-│   ├── _lib/              # JWT発行・検証（jose）
-│   └── _utils/            # Prismaクライアント / 認証ユーザー取得 / フォーマッタ
-├── services/              # ビジネスロジック層
-├── repositories/          # DBアクセス層（Prisma）
-├── schemas/               # Zodスキーマ（API・フォーム共用）
-├── types/                 # APIレスポンスのDTO型定義
-├── store/                 # Zustand（ログインユーザー情報）
-├── hooks/                 # 汎用フック（useDebounce / useLocalStorage、テスト付き）
-├── components/            # shadcn/ui・フォーム共通コンポーネント
-├── lib/                   # LINE Messaging API / winston logger / utils
-├── middleware.ts          # JWT検証によるルート保護（ホワイトリスト方式）
-└── instrumentation.ts     # node-cronの登録（サーバ起動時）
-prisma/                    # schema / migrations / seed（ゲスト・デモデータ投入）
-e2e/                       # Playwright E2E（認証フロー）
-.github/workflows/         # CI（lint / test / build / E2E）・CD（EC2自動デプロイ）
-```
-
-</details>
-
 ## 今後の改善
 
 - **Googleログイン（OAuth）**: 外部認証の導入でログインの手間を減らす
 - **レスポンシブ対応・PWA通知**: スマホでの利用体験の底上げ
 - **ルーティン機能**: Prismaスキーマに `Routine` 系モデルは定義済みだが、コア機能（タイマー・分析・通知）の完成度を優先するため、API・画面の実装はあえてスコープ外とした
+
+## 過去Versionについて
+
+> 本リポジトリは **EC2運用版**のver.2です。ver.1となる**Supabase×Vercel版** はこちら → [デモ画面](https://my-original-app-rho.vercel.app/) ｜ [GitHub](https://github.com/mizunatoma/OneTrack-v1-supabase)
