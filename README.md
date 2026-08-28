@@ -335,6 +335,8 @@ e2e/                       # Playwright E2E（認証フロー）
 - **レスポンシブ対応・PWA通知**: スマホでの利用体験の底上げ
 - **ルーティン機能**: Prismaスキーマに `Routine` 系モデルは定義済みだが、コア機能（タイマー・分析・通知）の完成度を優先するため、API・画面の実装はあえてスコープ外とした
 
-## 📜 過去Versionについて
+## 📎 補足
 
 > 本リポジトリは **EC2運用版**のver.2です。ver.1となる**Supabase×Vercel版** はこちら → [デモ画面](https://my-original-app-rho.vercel.app/) ｜ [GitHub](https://github.com/mizunatoma/OneTrack-v1-supabase)
+
+> 学習の記録をまとめています → [学習ログ](https://html-vault-nu.vercel.app/)
