@@ -54,24 +54,30 @@ export default function OnboardingModal({ open, onComplete }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={() => onComplete()}>
-      <DialogContent>
+      <DialogContent className="rounded-[16px] px-[26px] pt-[26px] pb-[22px] shadow-[0_20px_50px_rgba(0,0,0,0.25)] ring-0 sm:max-w-[360px]">
         {page === 0 ? (
           // 1 ページ目
           <>
-            <DialogHeader>
-              <p className="text-xs text-gray-400">{page + 1} / 2</p>
-              <DialogTitle className="mb-2">まずは記録してみよう！</DialogTitle>
+            <DialogHeader className="gap-0">
+              <p className="mb-1.5 text-[11px] font-medium tracking-[0.08em] text-[#a49d8e]">
+                {page + 1} / 2
+              </p>
+              <DialogTitle className="mb-4 text-[17px] leading-normal font-bold text-[#2b2b28]">
+                まずは記録してみよう！
+              </DialogTitle>
               <div className="flex flex-col gap-4">
                 {PAGE1_ITEMS.map((item) => {
                   const Icon = item.icon
                   return (
                     <div key={item.title} className="flex gap-3">
-                      <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#5D866C]/10">
+                      <div className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-[#5D866C]/10">
                         <Icon size={16} className="text-[#5D866C]" />
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800">{item.title}</p>
-                        <p className="mt-0.5 text-sm text-gray-500">
+                        <p className="text-[13px] font-bold text-[#2b2b28]">
+                          {item.title}
+                        </p>
+                        <p className="mt-0.5 text-[12.5px] text-[#77756c]">
                           {item.desc}
                         </p>
                       </div>
@@ -81,7 +87,10 @@ export default function OnboardingModal({ open, onComplete }: Props) {
               </div>
             </DialogHeader>
             <div>
-              <Button className="w-full" onClick={() => setPage(1)}>
+              <Button
+                className="h-auto w-full rounded-[10px] bg-[#5d866c] p-[11px] text-sm font-bold text-white hover:bg-[#517558]"
+                onClick={() => setPage(1)}
+              >
                 次へ
               </Button>
             </div>
@@ -89,20 +98,26 @@ export default function OnboardingModal({ open, onComplete }: Props) {
         ) : (
           // 2 ページ目
           <>
-            <DialogHeader>
-              <p className="text-xs text-gray-400">{page + 1} / 2</p>
-              <DialogTitle className="mb-2">画面の見かた</DialogTitle>
+            <DialogHeader className="gap-0">
+              <p className="mb-1.5 text-[11px] font-medium tracking-[0.08em] text-[#a49d8e]">
+                {page + 1} / 2
+              </p>
+              <DialogTitle className="mb-4 text-[17px] leading-normal font-bold text-[#2b2b28]">
+                画面の見かた
+              </DialogTitle>
               <div className="flex flex-col gap-4">
                 {PAGE2_ITEMS.map((item) => {
                   const Icon = item.icon
                   return (
                     <div key={item.title} className="flex gap-3">
-                      <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#5D866C]/10">
+                      <div className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-[#5D866C]/10">
                         <Icon size={16} className="text-[#5D866C]" />
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800">{item.title}</p>
-                        <p className="mt-0.5 text-sm text-gray-500">
+                        <p className="text-[13px] font-bold text-[#2b2b28]">
+                          {item.title}
+                        </p>
+                        <p className="mt-0.5 text-[12.5px] text-[#77756c]">
                           {item.desc}
                         </p>
                       </div>
@@ -111,11 +126,18 @@ export default function OnboardingModal({ open, onComplete }: Props) {
                 })}
               </div>
             </DialogHeader>
-            <div className="flex gap-2">
-              <Button variant="ghost" onClick={() => setPage(0)}>
+            <div className="flex gap-2.5">
+              <Button
+                variant="outline"
+                className="h-auto rounded-[10px] border-[#e4ddcf] px-4 py-[11px] text-[13px] text-[#77756c]"
+                onClick={() => setPage(0)}
+              >
                 戻る
               </Button>
-              <Button className="flex-1" onClick={() => onComplete()}>
+              <Button
+                className="h-auto flex-1 rounded-[10px] bg-[#5d866c] p-[11px] text-sm font-bold text-white hover:bg-[#517558]"
+                onClick={() => onComplete()}
+              >
                 はじめる
               </Button>
             </div>
