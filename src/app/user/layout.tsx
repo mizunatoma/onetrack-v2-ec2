@@ -2,6 +2,7 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useUserStore } from '@/store/userStore'
 import { useEffect } from 'react'
+import OnboardingModal from './_components/OnboardingModal'
 import TodoPanel from './_components/TodoPanel'
 import UserHeader from './_components/UserHeader'
 import UserSidebar from './_components/UserSidebar'
@@ -22,6 +23,11 @@ export default function UserLayout({
     false,
   )
   const toggleTodoPanel = () => setIsTodoPanelOpen(!isTodoPanelOpen)
+
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useLocalStorage(
+    'hasSeenOnboarding',
+    false,
+  )
 
   const setUser = useUserStore((state) => state.setUser)
   useEffect(() => {
@@ -48,6 +54,11 @@ export default function UserLayout({
       <TodoPanel
         isTodoPanelOpen={isTodoPanelOpen}
         isSideBarOpen={isSideBarOpen}
+      />
+
+      <OnboardingModal
+        open={!hasSeenOnboarding}
+        onComplete={() => setHasSeenOnboarding(true)}
       />
 
       <div
