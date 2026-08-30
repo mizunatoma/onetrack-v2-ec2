@@ -1,7 +1,7 @@
 'use client'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useUserStore } from '@/store/userStore'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import OnboardingModal from './_components/OnboardingModal'
 import TodoPanel from './_components/TodoPanel'
 import UserHeader from './_components/UserHeader'
@@ -28,6 +28,7 @@ export default function UserLayout({
     'hasSeenOnboarding',
     false,
   )
+  const [isGuest, setIsGuest] = useState(false)
 
   const setUser = useUserStore((state) => state.setUser)
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function UserLayout({
       const res = await fetch('/api/profile')
       const data = await res.json()
       setUser(data.profile)
+      setIsGuest(data.isGuest) // boolean
     }
     fetchUser()
   }, [])
@@ -57,8 +59,10 @@ export default function UserLayout({
       />
 
       <OnboardingModal
-        open={!hasSeenOnboarding}
-        onComplete={() => setHasSeenOnboarding(true)}
+        open={isGuest || !hasSeenOnboarding} // ゲストは毎回表示したいので、既読かどうかを無視する (いずれかがYesならYesを渡す)
+        onComplete={() => {
+          if (!isGuest) setHasSeenOnboarding(true)
+        }}
       />
 
       <div
