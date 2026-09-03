@@ -27,11 +27,13 @@ test('新規登録後ログインし、そのままCategoryを追加・Tracking�
   await page.getByLabel('パスワード').fill('passwordTest')
   await page.getByRole('button', { name: 'ログイン' }).click()
   await expect(page).toHaveURL('/user/timeline')
-  // 3. category を作成
+  // 3. オンボーディングモーダルを閉じる
+  await page.getByRole('button', { name: 'Close' }).click()
+  // 4. category を作成
   await page.getByRole('button', { name: '追加', exact: true }).click() // exact: true => 完全一致
   await page.getByPlaceholder("Category's name").fill('TestCategory')
   await page.getByRole('button', { name: '保存' }).click()
-  // 4. Tracking を開始
+  // 5. Tracking を開始
   await page.getByText('TestCategory').click()
   await expect(page.getByText(/開始:/)).toBeVisible()
 })
