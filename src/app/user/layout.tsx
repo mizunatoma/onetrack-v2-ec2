@@ -29,6 +29,7 @@ export default function UserLayout({
     false,
   )
   const [isGuest, setIsGuest] = useState(false)
+  const [isClosedThisVisit, setIsClosedThisVisit] = useState(false)
 
   const setUser = useUserStore((state) => state.setUser)
   useEffect(() => {
@@ -59,8 +60,9 @@ export default function UserLayout({
       />
 
       <OnboardingModal
-        open={isGuest || !hasSeenOnboarding} // ゲストは毎回表示したいので、既読かどうかを無視する (いずれかがYesならYesを渡す)
+        open={(isGuest || !hasSeenOnboarding) && !isClosedThisVisit}
         onComplete={() => {
+          setIsClosedThisVisit(true)
           if (!isGuest) setHasSeenOnboarding(true)
         }}
       />
