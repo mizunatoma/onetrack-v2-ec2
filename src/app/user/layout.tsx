@@ -1,7 +1,8 @@
 'use client'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useUserStore } from '@/store/userStore'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import OnboardingModal from './_components/OnboardingModal'
 import TodoPanel from './_components/TodoPanel'
 import UserHeader from './_components/UserHeader'
 import UserSidebar from './_components/UserSidebar'
@@ -23,12 +24,20 @@ export default function UserLayout({
   )
   const toggleTodoPanel = () => setIsTodoPanelOpen(!isTodoPanelOpen)
 
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useLocalStorage(
+    'hasSeenOnboarding',
+    false,
+  )
+  const [isGuest, setIsGuest] = useState(false)
+  const [isClosedThisVisit, setIsClosedThisVisit] = useState(false)
+
   const setUser = useUserStore((state) => state.setUser)
   useEffect(() => {
     const fetchUser = async () => {
       const res = await fetch('/api/profile')
       const data = await res.json()
       setUser(data.profile)
+      setIsGuest(data.isGuest) // boolean
     }
     fetchUser()
   }, [])
@@ -48,6 +57,14 @@ export default function UserLayout({
       <TodoPanel
         isTodoPanelOpen={isTodoPanelOpen}
         isSideBarOpen={isSideBarOpen}
+      />
+
+      <OnboardingModal
+        open={(isGuest || !hasSeenOnboarding) && !isClosedThisVisit}
+        onComplete={() => {
+          setIsClosedThisVisit(true)
+          if (!isGuest) setHasSeenOnboarding(true)
+        }}
       />
 
       <div
