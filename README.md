@@ -1,6 +1,6 @@
 ## ◽️ 利用者向け情報
 
-**タイマー記録とTodo管理を同一画面にまとめ、学習時間の記録から月次の振り返りまで行えるWebアプリ「OneTrack (v2)」**
+** タイマー記録とTodo管理を同一画面にまとめ、学習時間の記録から月次の振り返りまで行えるWebアプリ「OneTrack (v2)」**
 
 [アプリを試す](https://learning-track.com) ｜ [操作デモを見る（Loom）](https://www.loom.com/share/870cd9472a42497fb2e5c40a7f09a233)
 
