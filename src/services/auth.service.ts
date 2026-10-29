@@ -18,13 +18,12 @@ export const authService = {
   },
   // bcryptjs でパスワードをハッシュ化
   async createPasswordHash(password: string) {
-    const salt = bcrypt.genSaltSync(10)
-    const passwordHash = bcrypt.hashSync(password, salt)
+    const passwordHash = await bcrypt.hash(password, 12)
     return passwordHash
   },
   // bcryptjs でパスワードを照合
   async verifyPassword(password: string, passwordHash: string) {
-    const isMatch = bcrypt.compareSync(password, passwordHash)
+    const isMatch = await bcrypt.compare(password, passwordHash)
     return isMatch
   },
   // jose で JWTトークンを発行して Cookie にセット

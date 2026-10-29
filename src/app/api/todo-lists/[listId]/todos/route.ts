@@ -8,15 +8,16 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const GET = async (
   _request: NextRequest,
-  { params }: { params: { listId: string } },
+  { params }: { params: Promise<{ listId: string }> },
 ) => {
   try {
+    const { listId } = await params
     const auth = await getAuthUser()
     if (auth instanceof NextResponse) return auth
     const user = auth.user
 
     // リストの存在確認と所有権チェック
-    const todos = await todoItemService.getList(params.listId, user.id)
+    const todos = await todoItemService.getList(listId, user.id)
     if (!todos)
       return NextResponse.json({ error: 'No list found' }, { status: 404 })
 
@@ -34,14 +35,15 @@ export const GET = async (
 
 export const POST = async (
   request: NextRequest,
-  { params }: { params: { listId: string } },
+  { params }: { params: Promise<{ listId: string }> },
 ) => {
   try {
+    const { listId } = await params
     const auth = await getAuthUser()
     if (auth instanceof NextResponse) return auth
     const user = auth.user
 
-    const list = await todoListService.getTodoList(user.id, params.listId)
+    const list = await todoListService.getTodoList(user.id, listId)
     if (!list)
       return NextResponse.json({ error: 'No list found' }, { status: 404 })
 
@@ -50,10 +52,7 @@ export const POST = async (
     if (!result.success) {
       return NextResponse.json({ errors: result.error.issues }, { status: 400 })
     }
-    const newTodo = await todoItemService.createTodo(
-      params.listId,
-      result.data.title,
-    )
+    const newTodo = await todoItemService.createTodo(listId, result.data.title)
 
     return NextResponse.json<CreateTodoItemResponse>(
       { todo: newTodo },

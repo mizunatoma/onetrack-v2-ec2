@@ -1,8 +1,16 @@
+import { enforceRateLimit } from '@/lib/rateLimit'
 import { updatePasswordSchema } from '@/schemas/auth'
 import { authService } from '@/services/auth.service'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const POST = async (request: NextRequest) => {
+  const rateLimitResponse = enforceRateLimit(request, {
+    namespace: 'update-password',
+    limit: 10,
+    windowMs: 15 * 60 * 1000,
+  })
+  if (rateLimitResponse) return rateLimitResponse
+
   try {
     const body = await request.json()
     const result = updatePasswordSchema.safeParse(body)
