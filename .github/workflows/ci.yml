@@ -19,7 +19,7 @@ jobs:
       - name: VMにNodeをセットアップ
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: '.nvmrc'
           cache: 'npm'
 
       - name: 依存をインストール
@@ -52,7 +52,7 @@ jobs:
 
     env: # buildもseedもtestも、この値を共有する
       DATABASE_URL: 'mysql://root:root@127.0.0.1:3306/testdb'
-      JWT_SECRET: 'test-secret'
+      JWT_SECRET: 'test-secret-at-least-32-characters-long'
       GUEST_EMAIL: 'guest@example.com'
       GUEST_PASSWORD: 'guestpassword'
       SITE_URL: 'http://localhost:3000'
@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: '.nvmrc'
           cache: 'npm'
 
       - name: 依存をインストール

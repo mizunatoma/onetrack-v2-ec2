@@ -1,3 +1,4 @@
+import { enforceRateLimit } from '@/lib/rateLimit'
 import { resetPasswordSchema } from '@/schemas/auth'
 import { authService } from '@/services/auth.service'
 import { NextRequest, NextResponse } from 'next/server'
@@ -8,6 +9,13 @@ const RESET_RESPONSE = {
 }
 
 export const POST = async (request: NextRequest) => {
+  const rateLimitResponse = enforceRateLimit(request, {
+    namespace: 'reset-password',
+    limit: 5,
+    windowMs: 60 * 60 * 1000,
+  })
+  if (rateLimitResponse) return rateLimitResponse
+
   try {
     const body = await request.json()
     const result = resetPasswordSchema.safeParse(body)

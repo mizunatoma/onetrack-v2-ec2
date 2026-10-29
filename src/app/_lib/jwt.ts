@@ -1,25 +1,40 @@
-import * as jose from 'jose'
+import { SignJWT, jwtVerify as verifyJWT } from 'jose'
+
+const JWT_ALGORITHM = 'HS256'
+const JWT_ISSUER = 'onetrack'
+const JWT_AUDIENCE = 'onetrack-web'
+
+function jwtSecret() {
+  const secret = process.env.JWT_SECRET
+  if (!secret || secret.length < 32) {
+    throw new Error('JWT_SECRET must be at least 32 characters')
+  }
+  return new TextEncoder().encode(secret)
+}
 
 // JWTを作成する関数
 export async function signJWT(userId: string, isGuest?: boolean) {
-  const alg = 'HS256'
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-  const jwt = await new jose.SignJWT({ userId, isGuest }) // JWTに userId, isGuest のキーを追加
+  const jwt = await new SignJWT({ userId, isGuest }) // JWTに userId, isGuest のキーを追加
     // Base64は誰でもデコードできるので、キーについて、改ざんはできないが閲覧される可能性あり
-    .setProtectedHeader({ alg })
+    .setProtectedHeader({ alg: JWT_ALGORITHM })
     .setIssuedAt() // 発行日時を記録する
+    .setIssuer(JWT_ISSUER)
+    .setAudience(JWT_AUDIENCE)
     .setExpirationTime('24h') // サーバーが「このトークンがいつ失効するか」を検証する
-    .sign(secret)
+    .sign(jwtSecret())
   return jwt
 }
 
 // JWTを検証して中身を返す関数
 export async function jwtVerify(token: string) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-  const { payload } = await jose.jwtVerify<{
+  const { payload } = await verifyJWT<{
     userId: string
     isGuest: boolean
-  }>(token, secret)
+  }>(token, jwtSecret(), {
+    algorithms: [JWT_ALGORITHM],
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE,
+  })
   return { payload }
 }
 

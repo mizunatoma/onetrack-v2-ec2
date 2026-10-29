@@ -8,14 +8,15 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { listId: string } },
+  { params }: { params: Promise<{ listId: string }> },
 ) => {
   try {
+    const { listId } = await params
     const auth = await getAuthUser()
     if (auth instanceof NextResponse) return auth
     const user = auth.user
 
-    const todoList = await todoListService.getTodoList(user.id, params.listId)
+    const todoList = await todoListService.getTodoList(user.id, listId)
     if (!todoList)
       return NextResponse.json({ error: 'No list found' }, { status: 404 })
 
@@ -25,7 +26,7 @@ export const PUT = async (
       return NextResponse.json({ errors: result.error.issues }, { status: 400 })
     }
     const updatedList = await todoListService.updateTodoListName(
-      params.listId,
+      listId,
       result.data.name,
     )
 
@@ -46,18 +47,19 @@ export const PUT = async (
 
 export const DELETE = async (
   _request: NextRequest,
-  { params }: { params: { listId: string } },
+  { params }: { params: Promise<{ listId: string }> },
 ) => {
   try {
+    const { listId } = await params
     const auth = await getAuthUser()
     if (auth instanceof NextResponse) return auth
     const user = auth.user
 
-    const todoList = await todoListService.getTodoList(user.id, params.listId)
+    const todoList = await todoListService.getTodoList(user.id, listId)
     if (!todoList)
       return NextResponse.json({ error: 'No list found' }, { status: 404 })
 
-    await todoListService.deleteTodoList(params.listId)
+    await todoListService.deleteTodoList(listId)
 
     return new NextResponse(null, { status: 204 }) // Responseのデータなし、リクエスト成功ステータスコード
   } catch (e) {

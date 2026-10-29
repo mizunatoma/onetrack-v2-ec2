@@ -41,10 +41,21 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             cd /home/ubuntu/TimeTrackVer2
             git pull
+            TARGET_NODE=$(cat .nvmrc)
+            CURRENT_NODE=$(nvm current)
+            if [ "$CURRENT_NODE" = "v$TARGET_NODE" ]; then
+              nvm install "$TARGET_NODE"
+            else
+              nvm install "$TARGET_NODE" --reinstall-packages-from="$CURRENT_NODE"
+            fi
+            nvm use "$TARGET_NODE"
+            nvm alias default "$TARGET_NODE"
+            node --version
             npm ci
             npx prisma migrate deploy
             NODE_OPTIONS="--max-old-space-size=1536" npm run build
-            pm2 restart onetrack
+            pm2 update
+            pm2 restart onetrack --update-env
 
       # 開けた門は必ず閉める（if always() = 失敗しても実行）開けたIPをピンポイントで削除
       - name: SGからrunnerのIP許可を削除

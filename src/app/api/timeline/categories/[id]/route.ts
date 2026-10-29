@@ -8,14 +8,15 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
   try {
+    const { id } = await params
     const auth = await getAuthUser()
     if (auth instanceof NextResponse) return auth
     const user = auth.user
 
-    const category = await categoryService.findCategory(params.id, user.id)
+    const category = await categoryService.findCategory(id, user.id)
     if (!category) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
@@ -49,9 +50,10 @@ export const PUT = async (
 
 export const DELETE = async (
   _request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
   try {
+    const { id } = await params
     const auth = await getAuthUser()
     if (auth instanceof NextResponse) return auth
     const user = auth.user
@@ -63,12 +65,12 @@ export const DELETE = async (
       )
     }
 
-    const category = await categoryService.findCategory(params.id, user.id)
+    const category = await categoryService.findCategory(id, user.id)
     if (!category) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
 
-    await categoryService.deleteCategories(params.id)
+    await categoryService.deleteCategories(id)
 
     return new NextResponse<CategoryResponse>(null, { status: 200 })
   } catch (e) {

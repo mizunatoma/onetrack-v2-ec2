@@ -8,14 +8,15 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { todoId: string } },
+  { params }: { params: Promise<{ todoId: string }> },
 ) => {
   try {
+    const { todoId } = await params
     const auth = await getAuthUser()
     if (auth instanceof NextResponse) return auth
     const user = auth.user
 
-    const todo = await todoItemService.getTodo(params.todoId, user.id)
+    const todo = await todoItemService.getTodo(todoId, user.id)
     if (!todo)
       return NextResponse.json({ error: 'No todo found' }, { status: 404 })
 
@@ -25,7 +26,7 @@ export const PUT = async (
       return NextResponse.json({ errors: result.error.issues }, { status: 400 })
     }
     const updatedTodo = await todoItemService.updateTodo(
-      params.todoId,
+      todoId,
       result.data.title,
       result.data.isDone,
     )
@@ -44,14 +45,15 @@ export const PUT = async (
 
 export const DELETE = async (
   _request: NextRequest,
-  { params }: { params: { todoId: string } },
+  { params }: { params: Promise<{ todoId: string }> },
 ) => {
   try {
+    const { todoId } = await params
     const auth = await getAuthUser()
     if (auth instanceof NextResponse) return auth
     const user = auth.user
 
-    const todo = await todoItemService.getTodo(params.todoId, user.id)
+    const todo = await todoItemService.getTodo(todoId, user.id)
     if (!todo)
       return NextResponse.json({ error: 'No todo found' }, { status: 404 })
 

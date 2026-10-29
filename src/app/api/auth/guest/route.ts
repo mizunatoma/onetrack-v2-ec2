@@ -1,8 +1,16 @@
 // /api/guest
+import { enforceRateLimit } from '@/lib/rateLimit'
 import { authService } from '@/services/auth.service'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export const POST = async () => {
+export const POST = async (request: NextRequest) => {
+  const rateLimitResponse = enforceRateLimit(request, {
+    namespace: 'guest',
+    limit: 30,
+    windowMs: 5 * 60 * 1000,
+  })
+  if (rateLimitResponse) return rateLimitResponse
+
   try {
     // ゲストログイン情報を取得
     const guestUser = await authService.findGuestUser()
